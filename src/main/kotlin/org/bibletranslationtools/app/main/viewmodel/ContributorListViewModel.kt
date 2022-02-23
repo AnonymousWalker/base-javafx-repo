@@ -16,7 +16,9 @@ class ContributorListViewModel: ViewModel() {
     init {
         contributorList.setAll(contributorRepo.getAll())
         contributorList.onChange {
-            contributorRepo.setAll(contributorList)
+            contributorRepo.setAll(contributorList).subscribe { result ->
+                println(result)
+            }
         }
     }
 

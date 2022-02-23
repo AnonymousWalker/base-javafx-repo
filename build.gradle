@@ -54,7 +54,11 @@ dependencies {
     implementation "org.kordamp.ikonli:ikonli-materialdesign-pack:$ikonli_version"
     implementation "org.kordamp.ikonli:ikonli-material-pack:$ikonli_version"
 
-    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.11.0"
+    // ReactiveX
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlinVer"
+    implementation "com.github.thomasnield:rxkotlinfx:$rxkotlinfxVer"
+
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVer"
 }
 
 group 'org.bibletranslationtools'
