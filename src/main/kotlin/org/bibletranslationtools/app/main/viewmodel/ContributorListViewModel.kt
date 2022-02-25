@@ -9,16 +9,14 @@ import tornadofx.*
 class ContributorListViewModel: ViewModel() {
     private val contributorRepo: ContributorRepository = ContributorRepository()
 
-    val nameInputProperty = SimpleStringProperty()
+    val nameInputProperty = SimpleStringProperty("")
     val projectIdProperty = SimpleIntegerProperty(1)
     val contributorList = observableListOf<Contributor>()
 
     init {
         contributorList.setAll(contributorRepo.getAll())
         contributorList.onChange {
-            contributorRepo.setAll(contributorList).subscribe { result ->
-                println(result)
-            }
+            contributorRepo.setAll(contributorList)
         }
     }
 
@@ -27,10 +25,11 @@ class ContributorListViewModel: ViewModel() {
         nameInputProperty.value.let {
             if (it.isNotBlank()) {
                 val contributor = Contributor(
-                    nameInputProperty.value.trim(),
+                    it.trim(),
                     projectIdProperty.value
                 )
                 contributorList.add(0, contributor)
+                nameInputProperty.set("")
             }
         }
     }

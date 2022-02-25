@@ -3,6 +3,7 @@ package org.bibletranslationtools.app.main.ui
 import javafx.geometry.Pos
 import javafx.geometry.VPos
 import javafx.scene.control.TextField
+import javafx.scene.input.KeyCode
 import org.bibletranslationtools.app.main.viewmodel.ContributorListViewModel
 import org.kordamp.ikonli.javafx.FontIcon
 import org.kordamp.ikonli.material.Material
@@ -10,7 +11,7 @@ import tornadofx.*
 
 class RootView : View() {
     private val viewModel: ContributorListViewModel by inject()
-    private lateinit var nameInput: TextField
+    private lateinit var txtInput: TextField
     private val projectId = 1
 
     init {
@@ -48,19 +49,27 @@ class RootView : View() {
 
             alignment = Pos.CENTER_LEFT
             textfield(viewModel.nameInputProperty) {
+                txtInput = this
                 addClass("contributor__name-input")
+
+                setOnKeyPressed {
+                    if (it.code == KeyCode.ENTER) {
+                        viewModel.addContributor()
+                    }
+                }
             }
             button("Add") {
                 addClass("contributor__add-btn")
                 graphic = FontIcon(Material.ADD)
                 setOnAction {
                     viewModel.addContributor()
+                    txtInput.requestFocus()
                 }
             }
         }
 
         listview(viewModel.contributorList) {
-            addClass("contributor-list")
+            addClass("wa-list-view","contributor-list")
 
             isMouseTransparent = true
             isFocusTraversable = false

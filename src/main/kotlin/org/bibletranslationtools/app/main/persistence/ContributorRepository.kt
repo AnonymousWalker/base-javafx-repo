@@ -30,14 +30,9 @@ class ContributorRepository {
         writeJsonToResource(json)
     }
 
-    fun setAll(contributors: List<Contributor>): Observable<Int> {
-        return Observable
-            .fromCallable {
-                val json = jacksonObjectMapper().writeValueAsString(contributors)
-                writeJsonToResource(json)
-                0
-            }
-            .subscribeOn(Schedulers.computation())
+    fun setAll(contributors: List<Contributor>) {
+        val json = jacksonObjectMapper().writeValueAsString(contributors)
+        writeJsonToResource(json)
     }
 
     private fun getResourceAsString(): String {
