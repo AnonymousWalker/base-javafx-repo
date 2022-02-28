@@ -27,11 +27,16 @@ class RootView : View() {
                 addClass("contributor__section-heading")
             }
             textflow{
-                text("By exporting this project, you agree to release your work under a ")
+                addClass("contributor__section-body")
+                text("By exporting this project, you agree to release your work under ")
                 hyperlink("Creative Commons - Attribution-ShareAlike 4.0 International - CC BY-SA.4.0") {
                     isWrapText = true
+                    action {
+                        FX.application.hostServices.showDocument(
+                            "https://creativecommons.org/licenses/by-sa/4.0/"
+                        )
+                    }
                 }
-                text("licence")
             }
         }
 
@@ -41,6 +46,7 @@ class RootView : View() {
             }
             label("Please include the names or pseudonyms of everyone who contributed to this project") {
                 isWrapText = true
+                addClass("contributor__section-body")
             }
         }
 

@@ -9,6 +9,10 @@
 
 .contributor__section-heading {
     -fx-font-weight: bold;
+    -fx-font-size: 1.5em;
+}
+
+.contributor__section-body {
     -fx-font-size: 1.3em;
 }
 
