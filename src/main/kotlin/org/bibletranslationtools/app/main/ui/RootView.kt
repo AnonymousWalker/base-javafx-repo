@@ -1,5 +1,6 @@
 package org.bibletranslationtools.app.main.ui
 
+import javafx.event.EventHandler
 import javafx.geometry.Pos
 import javafx.geometry.VPos
 import javafx.scene.control.TextField
@@ -77,12 +78,18 @@ class RootView : View() {
         listview(viewModel.contributorList) {
             addClass("wa-list-view","contributor-list")
 
-            isMouseTransparent = true
-            isFocusTraversable = false
 
             setCellFactory {
-                ContributorListCell()
+                ContributorListCell().apply {
+                    onEdit.set(EventHandler {
+                        viewModel.editContributor(it.source as ContributorCellData)
+                    })
+                }
             }
+
         }
+
+
+
     }
 }
