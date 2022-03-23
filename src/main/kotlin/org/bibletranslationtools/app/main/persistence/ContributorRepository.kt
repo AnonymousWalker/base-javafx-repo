@@ -11,10 +11,11 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 class ContributorRepository {
-    private val jsonFilePath = "/your/json/file.json"
+    private val jsonFilePath = "D:\\misc\\temp\\contributors.json"
+    private val licenseHtml = javaClass.classLoader.getResource("license.html").file
 
     fun getAll(): List<Contributor> {
-        return jacksonObjectMapper().readValue(getResourceAsString())
+        return jacksonObjectMapper().readValue(getResourceAsString(jsonFilePath))
     }
 
     fun add(contributor: Contributor) {
@@ -35,8 +36,12 @@ class ContributorRepository {
         writeJsonToResource(json)
     }
 
-    private fun getResourceAsString(): String {
-        return File(jsonFilePath).readText()
+    fun getLicense(): String {
+        return getResourceAsString(licenseHtml)
+    }
+
+    private fun getResourceAsString(path: String): String {
+        return File(path).readText()
     }
 
     private fun writeJsonToResource(json: String) {

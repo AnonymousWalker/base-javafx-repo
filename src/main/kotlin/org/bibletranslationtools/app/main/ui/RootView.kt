@@ -5,6 +5,9 @@ import javafx.geometry.Pos
 import javafx.geometry.VPos
 import javafx.scene.control.TextField
 import javafx.scene.input.KeyCode
+import javafx.scene.web.WebView
+import javafx.stage.Modality
+import javafx.stage.StageStyle
 import org.bibletranslationtools.app.main.viewmodel.ContributorListViewModel
 import org.kordamp.ikonli.javafx.FontIcon
 import org.kordamp.ikonli.material.Material
@@ -27,7 +30,7 @@ class RootView : View() {
             label("License Information") {
                 addClass("contributor__section-heading")
             }
-            textflow{
+            textflow {
                 addClass("contributor__section-body")
                 text("By exporting this project, you agree to release your work under ")
                 hyperlink("Creative Commons - Attribution-ShareAlike 4.0 International - CC BY-SA.4.0") {
@@ -76,7 +79,7 @@ class RootView : View() {
         }
 
         listview(viewModel.contributorList) {
-            addClass("wa-list-view","contributor-list")
+            addClass("wa-list-view", "contributor-list")
 
 
             setCellFactory {
@@ -88,8 +91,10 @@ class RootView : View() {
             }
 
         }
-
-
-
+        button("See license") {
+            setOnAction {
+                find<LicenseModal>().openModal(modality = Modality.NONE)
+            }
+        }
     }
 }
