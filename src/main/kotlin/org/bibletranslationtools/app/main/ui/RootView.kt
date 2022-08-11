@@ -13,10 +13,7 @@ import tornadofx.*
 
 class RootView : View() {
 
-    private val navigator: Navigator by inject()
-
     override val root = vbox {
-        add(navigator.breadCrumbsBar)
         paddingAll = 10.0
 
         vbox {
