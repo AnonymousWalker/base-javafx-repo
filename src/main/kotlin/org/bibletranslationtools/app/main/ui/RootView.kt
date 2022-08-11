@@ -1,37 +1,65 @@
 package org.bibletranslationtools.app.main.ui
 
+import com.jfoenix.controls.JFXPopup
+import javafx.geometry.Pos
+import javafx.scene.control.ListView
+import javafx.scene.control.PopupControl
+import javafx.stage.Popup
+import javafx.stage.PopupWindow
+import org.bibletranslationtools.app.main.ui.component.SourceText
+import org.kordamp.ikonli.javafx.FontIcon
+import org.kordamp.ikonli.materialdesign.MaterialDesign
 import tornadofx.*
 
 class RootView : View() {
 
     private val navigator: Navigator by inject()
 
-    init {
-        importStylesheet(javaClass.getResource("/css/my.css").toExternalForm())
-        workspace.header.removeFromParent()
-    }
-
     override val root = vbox {
         add(navigator.breadCrumbsBar)
-        hbox {
-            spacing = 10.0
-            paddingAll = 10.0
+        paddingAll = 10.0
 
-            button("Back") {
+        vbox {
+            alignment = Pos.CENTER
+            addClass("source-pane")
+
+            label("Source content pane")
+            button("Toggle text") {
+                graphic = FontIcon(MaterialDesign.MDI_COMMENT_TEXT_OUTLINE)
+
+                val popUp = Popup().apply {
+                    val c = SourceText()
+                    content.add(c)
+                    isAutoHide = true
+
+                    focusedProperty().onChange {
+                        println("popup focused: $it")
+                        if (it) c.requestFocus()
+                    }
+                }
+
                 setOnAction {
-                    navigator.back()
+                    val bound = this.boundsInLocal
+                    val screenBound = this.localToScreen(bound)
+
+                    popUp.show(
+                        this,
+                        0.0,
+                        0.0
+                    )
+                    popUp.x = screenBound.minX - popUp.width
+                    popUp.y = screenBound.minY - popUp.height
                 }
             }
-            button("Forward") {
-                setOnAction {
-                    navigator.forward()
-                }
-            }
+
         }
         add(workspace)
     }
 
-    override fun onDock() {
-        navigator.dock<ProjectView>()
+    init {
+        importStylesheet(javaClass.getResource("/css/my.css").toExternalForm())
+        importStylesheet(resources["/css/custom.css"])
+        workspace.header.removeFromParent()
     }
+
 }

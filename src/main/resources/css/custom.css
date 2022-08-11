@@ -1,0 +1,21 @@
+.source-popup-content {
+    -fx-padding: 5;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.23), 6, 0, 0, 3);
+    -fx-border-width: 1px;
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+}
+.custom-tooltip {
+    -fx-font-size: 1.6em;
+}
+
+.source-popup-content__scroll {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-max-width: 300px;
+    -fx-min-height: 200px;
+}
+
+.source-popup-content__scroll .viewport {
+    -fx-background-color: white;
+}

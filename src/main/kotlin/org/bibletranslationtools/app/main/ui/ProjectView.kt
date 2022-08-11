@@ -26,7 +26,6 @@ class ProjectView : View() {
     private val navigator: Navigator by inject()
     private val takeList = //listOf(ListItemView("take 1"))
         listOf("take 1", "take 2", "take 3", "take 4", "take 5", "take 6")
-            .map { ListItemNode(it) }
 
     private val mainViewModel = find<MainViewModel>()
     private val listData = takeList.toObservable()
