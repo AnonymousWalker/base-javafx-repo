@@ -1,51 +1,43 @@
 package org.bibletranslationtools.app.main.ui
 
-import com.jfoenix.controls.JFXPopup
-import javafx.geometry.Pos
+import javafx.collections.ObservableList
+import javafx.scene.control.ListCell
 import javafx.scene.control.ListView
-import javafx.scene.control.PopupControl
-import javafx.stage.Popup
-import javafx.stage.PopupWindow
-import org.bibletranslationtools.app.main.ui.component.SourceText
-import org.kordamp.ikonli.javafx.FontIcon
-import org.kordamp.ikonli.materialdesign.MaterialDesign
 import tornadofx.*
 
 class RootView : View() {
+
+    private lateinit var lv: ListView<Int>
+    val listItems = observableListOf(1,2,3)
+
+    val selectedList = observableListOf<Int>()
 
     override val root = vbox {
         paddingAll = 10.0
 
         vbox {
-            alignment = Pos.CENTER
+//            alignment = Pos.CENTER
             addClass("source-pane")
+            spacing = 10.0
 
-            label("Source content pane")
-            button("Toggle text") {
-                graphic = FontIcon(MaterialDesign.MDI_COMMENT_TEXT_OUTLINE)
-
-                val popUp = Popup().apply {
-                    val c = SourceText()
-                    content.add(c)
-                    isAutoHide = true
-
-                    focusedProperty().onChange {
-                        println("popup focused: $it")
-                        if (it) c.requestFocus()
-                    }
-                }
-
+            checkbox("select all") {
                 setOnAction {
-                    val bound = this.boundsInLocal
-                    val screenBound = this.localToScreen(bound)
+                    if (isSelected) selectedList.setAll(listItems)
+                    else selectedList.clear()
+                    lv.refresh()
+                }
+            }
+            hbox {
+                label("selected:  ")
+                label {
+                    selectedList.onChange { text = it.list.toString() }
+                }
+            }
 
-                    popUp.show(
-                        this,
-                        0.0,
-                        0.0
-                    )
-                    popUp.x = screenBound.minX - popUp.width
-                    popUp.y = screenBound.minY - popUp.height
+            listview(listItems) {
+                lv = this
+                setCellFactory {
+                    CheckBoxCell(selectedList)
                 }
             }
 
@@ -58,5 +50,28 @@ class RootView : View() {
         importStylesheet(resources["/css/custom.css"])
         workspace.header.removeFromParent()
     }
+}
 
+class CheckBoxCell(private val selectedList: ObservableList<Int>) : ListCell<Int>() {
+    val box = checkbox {
+        setOnAction {
+            if (this.isSelected) selectedList.add(index + 1)
+            else selectedList.remove(index + 1)
+        }
+    }
+
+    override fun updateItem(item: Int?, empty: Boolean) {
+        super.updateItem(item, empty)
+
+        if (item == null || empty) {
+            graphic = null
+            return
+        }
+
+        graphic = box.apply {
+            text = index.toString()
+            this.isSelected = (index + 1) in selectedList
+        }
+
+    }
 }
