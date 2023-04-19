@@ -10,7 +10,7 @@ class DemoApp: App(RootView::class) {
 
         stage.minWidth = 300.0
         stage.width = 800.0
-        stage.minHeight = 500.0
+        stage.minHeight = 100.0
     }
 }
 

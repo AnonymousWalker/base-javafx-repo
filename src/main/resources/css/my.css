@@ -1,3 +1,7 @@
+.root {
+    -fx-background-color: #b3b3b3;
+}
+
 .breadcrumb {
     -fx-border-color: #CCD0D6;
     -fx-border-width: 1px;

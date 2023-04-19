@@ -1,46 +1,71 @@
 package org.bibletranslationtools.app.main.ui
 
-import javafx.collections.ObservableList
-import javafx.scene.control.ListCell
-import javafx.scene.control.ListView
+import javafx.geometry.Pos
+import javafx.scene.control.TableCell
+import javafx.scene.control.TableView
+import javafx.scene.control.cell.PropertyValueFactory
+import javafx.scene.layout.ColumnConstraints
+import javafx.scene.layout.Priority
+import org.bibletranslationtools.app.main.ui.model.Workbook
+import org.bibletranslationtools.app.main.ui.model.WorkbookAction
+import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
 
 class RootView : View() {
 
-    private lateinit var lv: ListView<Int>
-    val listItems = observableListOf(1,2,3)
+    private val listItems = observableListOf<Workbook>(
+        Workbook("Jude", "New Testament"),
+        Workbook("2 Peter", "New Testament"),
+        Workbook("Genesis", "Old Testament"),
+        Workbook("Romans", "New Testament"),
+        Workbook("Psalms", "Old Testament"),
+        Workbook("Leviticus", "Old Testament"),
+        Workbook("Mark", "New Testament")
+    )
 
-    val selectedList = observableListOf<Int>()
 
     override val root = vbox {
         paddingAll = 10.0
 
         vbox {
-//            alignment = Pos.CENTER
-            addClass("source-pane")
-            spacing = 10.0
+            alignment = Pos.CENTER
 
-            checkbox("select all") {
-                setOnAction {
-                    if (isSelected) selectedList.setAll(listItems)
-                    else selectedList.clear()
-                    lv.refresh()
+            tableview(listItems) {
+                addClass("wa-table-view")
+                column("Book", Workbook::nameProp).apply {
+                    addClass("wa-table-column")
+                    setCellValueFactory {
+                        it.value.nameProp
+                    }
+                    setCellFactory { TableHeaderCell() }
+                    usePrefWidth = true
+                    remainingWidth()
+                }
+                column("Anthology", Workbook::project.getter).apply {
+                    setCellValueFactory {
+                        it.value.project.toProperty()
+                    }
+                    setCellFactory { TableTextCell() }
+                    remainingWidth()
+
+                }
+                column("Progress", Workbook::progress.getter).apply {
+                    cellValueFactory = PropertyValueFactory(Workbook::progress.name)
+                    setCellFactory { TableProgressCell() }
+                    usePrefWidth = true
+                    remainingWidth()
+
+                }
+                column("Action", Workbook::action.getter).apply {
+                    setCellValueFactory {
+                        it.value.action.toProperty()
+                    }
+                    setCellFactory { TableActionCell() }
+                    usePrefWidth = true
+                    remainingWidth()
+
                 }
             }
-            hbox {
-                label("selected:  ")
-                label {
-                    selectedList.onChange { text = it.list.toString() }
-                }
-            }
-
-            listview(listItems) {
-                lv = this
-                setCellFactory {
-                    CheckBoxCell(selectedList)
-                }
-            }
-
         }
         add(workspace)
     }
@@ -52,26 +77,64 @@ class RootView : View() {
     }
 }
 
-class CheckBoxCell(private val selectedList: ObservableList<Int>) : ListCell<Int>() {
-    val box = checkbox {
-        setOnAction {
-            if (this.isSelected) selectedList.add(index + 1)
-            else selectedList.remove(index + 1)
-        }
-    }
-
-    override fun updateItem(item: Int?, empty: Boolean) {
+open class TableTextCell : TableCell<Workbook, String>() {
+    override fun updateItem(item: String?, empty: Boolean) {
         super.updateItem(item, empty)
-
         if (item == null || empty) {
             graphic = null
             return
         }
 
-        graphic = box.apply {
-            text = index.toString()
-            this.isSelected = (index + 1) in selectedList
+        graphic = label(item)
+    }
+}
+
+class TableHeaderCell : TableTextCell() {
+    override fun updateItem(item: String?, empty: Boolean) {
+        super.updateItem(item, empty)
+        if (item == null || empty) {
+            graphic = null
+            return
         }
 
+        graphic = label(item) {
+            addClass("table-view__title-cell")
+        }
+    }
+}
+
+class TableProgressCell : TableCell<Workbook, Double>() {
+    override fun updateItem(item: Double?, empty: Boolean) {
+        super.updateItem(item, empty)
+        if (item == null || empty) {
+            graphic = null
+            return
+        }
+
+        graphic = progressbar(item) {
+            useMaxWidth = true
+        }
+    }
+}
+
+class TableActionCell : TableCell<Workbook, WorkbookAction>() {
+    private val actionButton = button {
+        graphic = FontIcon("mdi-dots-horizontal").apply {
+            addClass("table-view__action-icon")
+        }
+    }
+
+    override fun updateItem(item: WorkbookAction?, empty: Boolean) {
+        super.updateItem(item, empty)
+        if (item == null || empty) {
+            graphic = null
+            return
+        }
+
+        graphic = actionButton.apply {
+            setOnAction {
+                item.openBook()
+            }
+        }
     }
 }
