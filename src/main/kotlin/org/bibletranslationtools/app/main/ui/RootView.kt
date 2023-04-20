@@ -65,13 +65,19 @@ class RootView : View() {
                     setCellValueFactory {
                         it.value.nameProp
                     }
-                    setCellFactory { TableHeaderCell() }
+                    cellFormat {
+                        graphic = label(item) {
+                            addClass("table-view__title-cell")
+                        }
+                    }
                 }
                 column("Anthology", Workbook::project.getter).apply {
                     setCellValueFactory {
                         it.value.project.toProperty()
                     }
-                    setCellFactory { TableTextCell() }
+                    cellFormat {
+                        graphic = label(item)
+                    }
                 }
                 column("Progress", Workbook::progress.getter).apply {
                     setCellValueFactory { SimpleDoubleProperty(it.value.progress) as ObservableValue<Double> }
@@ -123,32 +129,6 @@ fun setUpPopupMenu(
         }
     }
     return ContextMenu(openItem, deleteItem)
-}
-
-open class TableTextCell : TableCell<Workbook, String>() {
-    override fun updateItem(item: String?, empty: Boolean) {
-        super.updateItem(item, empty)
-        if (item == null || empty) {
-            graphic = null
-            return
-        }
-
-        graphic = label(item)
-    }
-}
-
-class TableHeaderCell : TableTextCell() {
-    override fun updateItem(item: String?, empty: Boolean) {
-//        super.updateItem(item, empty)
-        if (item == null || empty) {
-            graphic = null
-            return
-        }
-
-        graphic = label(item) {
-            addClass("table-view__title-cell")
-        }
-    }
 }
 
 class TableProgressCell : TableCell<Workbook, Double>() {
