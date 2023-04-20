@@ -20,6 +20,7 @@ import org.bibletranslationtools.app.main.ui.model.Workbook
 import org.bibletranslationtools.app.main.ui.model.WorkbookAction
 import org.bibletranslationtools.app.main.ui.model.WorkbookActionDefault
 import org.kordamp.ikonli.javafx.FontIcon
+import tornadofx.FX
 import tornadofx.View
 import tornadofx.addClass
 import tornadofx.button
@@ -31,6 +32,7 @@ import tornadofx.onSelectionChange
 import tornadofx.paddingAll
 import tornadofx.progressbar
 import tornadofx.removeFromParent
+import tornadofx.smartResize
 import tornadofx.tableview
 import tornadofx.toProperty
 import tornadofx.useMaxWidth
@@ -81,6 +83,7 @@ class RootView : View() {
                         setCellFactory {
                             TableActionCell(actionCallback)
                         }
+                        isResizable = false
                     }
                 )
 
@@ -190,7 +193,14 @@ class TableActionCell(
 
         graphic = actionButton.apply {
             setOnAction {
-                popupMenu.show(actionButton, Side.BOTTOM, -40.0, 5.0)
+                // calculate menu display position
+                val bound = this.boundsInLocal
+                val screenBound = this.localToScreen(bound)
+                popupMenu.show(
+                    FX.primaryStage
+                )
+                popupMenu.x = screenBound.centerX - popupMenu.width + this.width
+                popupMenu.y = screenBound.maxY
             }
         }
     }
