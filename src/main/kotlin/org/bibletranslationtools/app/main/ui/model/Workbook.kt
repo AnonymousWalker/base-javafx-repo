@@ -9,16 +9,22 @@ class Workbook(
     val project: String,
     val progress: Double = 0.5,
 ) {
-    val action: WorkbookAction = WorkbookActionDefault(this)
     val nameProp = SimpleStringProperty(name)
 }
 
 interface WorkbookAction {
-    fun openBook()
+    fun openBook(w: Workbook)
+    fun deleteBook(w: Workbook)
 }
 
-class WorkbookActionDefault(private val workbook: Workbook) : WorkbookAction {
-    override fun openBook() {
-        println("opening book ${workbook.name}")
+class WorkbookActionDefault : WorkbookAction {
+
+    override fun openBook(w: Workbook) {
+        println("viewmodel opening book ${w.name}")
     }
+
+    override fun deleteBook(w: Workbook) {
+        println("viewmodel deleting book ${w.name}")
+    }
+
 }

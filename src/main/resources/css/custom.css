@@ -48,11 +48,15 @@
     -fx-cursor: hand;
 }
 
+.wa-table-view .table-row-cell:focused:selected .label {
+    -fx-text-fill: black;
+}
+
 .wa-table-view .table-row-cell:hover {
     -fx-background-color: lightblue;
 }
 
-.wa-table-view .table-view__title-cell {
+.wa-table-view .table-row-cell .table-view__title-cell {
     -fx-text-fill: #4b4b4b;
     -fx-font-size: 1.2em;
     -fx-font-weight: bold;
