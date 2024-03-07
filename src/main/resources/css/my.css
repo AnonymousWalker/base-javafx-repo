@@ -39,3 +39,23 @@
     -fx-icon-color: #3B5B8F;
     -fx-icon-size: 18px;
 }
+
+.chapter-grid {
+    -fx-background-color: orange;
+}
+
+.chapter-grid-context-menu {
+}
+
+.popup-root {
+    -fx-padding: 25;
+    -fx-background-color: transparent;
+    -fx-background-insets: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.75), 10, 0, 0, 0);
+
+}
+
+.clipped-pane {
+    -fx-border-width: 1px;
+    -fx-border-color: red;
+}
